@@ -1,0 +1,250 @@
+package ui;
+
+import controller.BookingController;
+import controller.FlightController;
+import controller.UserController;
+import model.Airport;
+import model.Booking;
+import model.Flight;
+
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+public class Validator {
+
+    private final FlightController flightController;
+    private final BookingController bookingController;
+    private final UserController userController;
+    private final Console console;
+
+    public Validator(FlightController flightController, BookingController bookingController, UserController userController, Console console) {
+        this.flightController = flightController;
+        this.bookingController = bookingController;
+        this.userController = userController;
+        this.console = console;
+    }
+
+    public Commands resolveCommand(String line, States state) {
+
+        Map<String, Commands> commands = state.getCommands();
+        List<Commands> required = commands.keySet().stream()
+                .filter(k -> line.equalsIgnoreCase(k))
+                .map(k -> commands.get(k))
+                .collect(Collectors.toList());
+
+        if (required.isEmpty()) return Commands.NO_COMMAND;
+
+        return required.get(0);
+    }
+
+    public boolean check(String line, InputTypes request) {
+        switch (request) {
+            case FLIGHT_NO:
+                return isFlightNo(line);
+            case BOOKING_NO:
+                return isBookingNo(line);
+            case DATE:
+                return isDate(line);
+            case CITY:
+                return isValidCity(line);
+            case NAME:
+            case SURNAME:
+                return isValidNaming(line);
+            case EMAIL:
+                return isEmail(line);
+            case REGISTERED_EMAIL:
+                return isRegisteredEmail(line);
+            case PASSWORD:
+                return isPassword(line);
+            case REGISTERED_PASSWORD:
+                return isRegisteredPassword(line);
+            case USERNAME:
+                return isUsername(line);
+            case REGISTERED_USERNAME:
+                return isRegisteredUser(line);
+            case INTEGER:
+                return isInteger(line);
+            case EXIT:
+                return line.equalsIgnoreCase(InputTypes.EXIT.toString());
+        }
+        return false;
+    }
+
+    private boolean isRegisteredUser(String line) {
+        if (!userController.isUsername(line)) {
+            console.printLn("This is not registered username");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isRegisteredEmail(String line) {
+        if (!userController.isEmail(line)) {
+            console.printLn("This is not registered email.");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isRegisteredPassword(String line) {
+        if (!userController.isPassword(line)) {
+            console.printLn("Wrong Password");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isUsername(String line) {
+        if (userController.isUsername(line)) {
+            console.printLn("This username has been taken");
+            return false;
+        }
+
+        for (int i = 0; i < line.length(); i++) {
+            char ch = line.charAt(i);
+            if (Character.isDigit(ch)) ;
+            else if (Character.isLetter(ch)) ;
+            else {
+                console.printLn("You are only allowed to use numbers and letters");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isEmail(String line) {
+        if (userController.isEmail(line)) {
+            console.printLn("This email has been registered before.");
+            return false;
+        } else if (!line.contains("@")) {
+            console.printLn("Invalid email address");
+            return false;
+        } else if(line.substring(line.indexOf("@")).length() < 4){
+            console.printLn("Invalid email address");
+            return false;
+        }
+
+        String symbols = "_-.";
+        String[] parts = line.split("@");
+        String prefix = parts[0];
+        String domain = parts[1];
+
+        for (int i = 0; i < prefix.length(); i++) {
+            char ch = prefix.charAt(i);
+            if (Character.isLetter(ch)) continue;
+            else if (Character.isDigit(ch)) continue;
+            else if (symbols.contains(ch + "")) continue;
+            else {
+                console.printLn("Invalid email address.");
+                return false;
+            }
+        }
+
+        if (!domain.contains(".")) {
+            console.printLn("Invalid email address");
+            return false;
+        }
+        for (int i = 0; i < domain.length(); i++) {
+            char ch = domain.charAt(i);
+            if (Character.isLetter(ch)) continue;
+            else if (Character.isDigit(ch)) continue;
+            else if (ch == '-' || ch == '.') continue;
+            else {
+                console.printLn("Invalid email address.");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isPassword(String line) {
+        if (line.length() < 8) {
+            console.printLn("Password must be longer than 8 characters.");
+            return false;
+        }
+        boolean isUppercase = false;
+        boolean isLowercase = false;
+        boolean isSymbol = false;
+        boolean isInteger = false;
+        boolean isWhiteSpace = false;
+
+        for (int i = 0; i < line.length(); i++) {
+            char ch = line.charAt(i);
+            if (Character.isUpperCase(ch)) isUppercase = true;
+            if (Character.isLowerCase(ch)) isLowercase = true;
+            if (Character.isWhitespace(ch)) isWhiteSpace = true;
+            if (Character.isDigit(ch)) isInteger = true;
+            if (!Character.isLetter(ch)) isSymbol = true;
+        }
+
+        if (isInteger && isUppercase && isLowercase && isSymbol && !isWhiteSpace) return true;
+        console.printLn("Not a valid password. Please, use upper, lower cases, symbols, integers, and NOT whitespaces.");
+        return false;
+    }
+
+    private boolean isValidCity(String line) {
+        if (!Airport.isValid(line)) console.printLn("Invalid City.");
+        return Airport.isValid(line);
+    }
+
+    private boolean isFlightNo(String line) {
+        if (!isInteger(line)) return false;
+
+        Integer num = Integer.parseInt(line);
+        Optional<Flight> flightByFlightId = flightController.findFlightByFlightId(num);
+        if (flightByFlightId.isPresent()) {
+            return true;
+        } else console.printLn("Invalid Flight Number");
+        return false;
+    }
+
+    private boolean isBookingNo(String line) {
+        if (!isInteger(line)) return false;
+
+        Integer num = Integer.parseInt(line);
+        Optional<Booking> bookingById = bookingController.findBookingById(num);
+        if (bookingById.isPresent()) {
+            return true;
+        } else console.printLn("Invalid Booking ID");
+        return false;
+    }
+
+    private boolean isDate(String line) {
+
+        try {
+            LocalDate.parse(line, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        } catch (DateTimeException ex) {
+            console.printLn("Invalid Date or Pattern.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isValidNaming(String line) {
+        if (line.isEmpty()) return false;
+        for (int i = 0; i < line.length(); i++) {
+            char ch = line.charAt(i);
+            if (ch < 'a' && ch > 'Z' || ch > 'z') return false;
+            if (ch < 'A' && ch > 'Z') return false;
+        }
+        return true;
+    }
+
+    private boolean isInteger(String line) {
+        try {
+            Integer.parseInt(line);
+        } catch (Exception ex) {
+            console.printLn("Invalid input. Not an integer.");
+            return false;
+        }
+
+        return true;
+    }
+}

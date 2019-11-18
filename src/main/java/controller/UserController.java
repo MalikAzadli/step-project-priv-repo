@@ -1,0 +1,49 @@
+package controller;
+
+import model.User;
+import service.UserServiceImpl;
+
+import java.io.File;
+
+public class UserController {
+
+    private final UserServiceImpl service;
+
+    public UserController() {
+        this(new File("./db", "users.txt"));
+    }
+
+    public UserController(File file) {
+
+        service = new UserServiceImpl(file);
+    }
+
+
+    public boolean create(User user) {
+        return service.create(user);
+    }
+
+    public boolean isUsername(String line) {
+        return service.isUsername(line);
+    }
+
+    public boolean isEmail(String line) {
+        return service.isEmail(line);
+    }
+
+    public boolean isPassword(String line) {
+        return service.isPassword(line);
+    }
+
+    public User getUser(String username, String password) {
+        return service.getUser(username, password);
+    }
+
+    public void load() {
+        service.load();
+    }
+
+    public void save(){
+        service.save();
+    }
+}

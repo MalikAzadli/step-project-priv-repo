@@ -1,0 +1,107 @@
+package model;
+
+import java.io.Serializable;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Formatter;
+import java.util.Objects;
+
+public class Booking implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    static int counter = 1;
+
+    private Integer bookingId;
+    private final LocalDateTime date = LocalDateTime.now();
+    private Flight flight;
+    private User user;
+    private Passenger passenger;
+
+    public Booking(Flight flight, User user, Passenger passenger, int id) {
+        this.bookingId = id;
+        this.flight = flight;
+        this.user = user;
+        this.passenger = passenger;
+    }
+
+    public Booking(Flight flight, Passenger passenger, User user, int id) {
+        this.bookingId = id;
+        this.flight = flight;
+        this.user = user;
+        this.passenger = passenger;
+    }
+
+    public Booking(Flight flight, Passenger passenger, int id){
+        this.bookingId = id;
+        this.flight = flight;
+        this.passenger = passenger;
+    }
+
+    public int getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(int bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public Passenger getPassenger() {
+        return passenger;
+    }
+
+    public void setPassenger(Passenger passenger) {
+        this.passenger = passenger;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        Formatter fmt = new Formatter(sb);
+
+        return fmt.format(
+                "%s %-3s %s %-20s %s %-25s %s %-18s %s %-10s %s %-18s %s %-5s",
+                "|", bookingId,
+                "|", user.getFullName(),
+                "|", passenger.getFullName(),
+                "|", DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(date),
+                "|", flight.getOrigin().toString(),
+                "|", DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(flight.getDeparture()),
+                "|", flight.getDestination()
+        ).toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Booking booking = (Booking) o;
+        return bookingId == booking.bookingId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bookingId, flight, user);
+    }
+}
