@@ -1,4 +1,3 @@
-
 import command_entities.*;
 import controller.BookingController;
 import controller.FlightController;
@@ -14,7 +13,6 @@ public class BookingManager {
     private States state = States.VISITOR;
     private Toolkit toolkit;
 
-    //TODO after cancelling booking number of available seats dont update
     public BookingManager() {
         this.console = new SystemConsole();
         this.display = new Display();
@@ -39,7 +37,7 @@ public class BookingManager {
                 case LOGIN: {
                     commandBasic = new Login(toolkit);
                     commandBasic.execute();
-                    state = States.USER;
+                    if (toolkit.isUserActivated()) state = States.USER;
                     break;
                 }
                 case REGISTER: {
@@ -85,7 +83,7 @@ public class BookingManager {
                 case LOGOUT: {
                     commandBasic = new Logout(toolkit);
                     commandBasic.execute();
-                    state = States.VISITOR;
+                    if (!toolkit.isUserActivated()) state = States.VISITOR;
                     break;
                 }
                 case EXIT: {

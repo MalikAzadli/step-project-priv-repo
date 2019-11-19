@@ -2,6 +2,7 @@ package dao.binary;
 
 import dao.DAO;
 import model.Booking;
+import model.Flight;
 import util.BinaryIO;
 
 import java.io.*;
@@ -54,7 +55,8 @@ public class BookingDAO implements DAO<Booking> {
     public boolean remove(int id) {
         try{
             Booking chosen = bookings.stream().filter(booking -> booking.getBookingId() == id).findFirst().get();
-            chosen.getFlight().removePassenger(chosen.getPassenger());
+            Flight flight = chosen.getFlight();
+            flight.removePassenger(chosen.getPassenger());
             boolean removed = bookings.remove(chosen);
             refreshIds();
             return removed;
@@ -75,5 +77,4 @@ public class BookingDAO implements DAO<Booking> {
     public void save() {
         io.save();
     }
-
 }

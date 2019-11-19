@@ -20,7 +20,7 @@ public class FlightGenerator {
         List<Flight> flights = new ArrayList<>();
         String flightNo;
         Airline airline;
-        int capacity;
+        Integer capacity;
         Airport origin, destination;
         LocalDateTime departure, arrival;
 

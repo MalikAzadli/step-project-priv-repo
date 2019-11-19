@@ -67,4 +67,5 @@ public class FlightDAO implements DAO<Flight> {
     public void save() {
         io.save();
     }
+
 }

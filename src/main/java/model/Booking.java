@@ -86,13 +86,13 @@ public class Booking implements Serializable {
         Formatter fmt = new Formatter(sb);
 
         return fmt.format(
-                "%s %-3s %s %-20s %s %-25s %s %-18s %s %-10s %s %-18s %s %-5s",
+                "%s %-3s %s %-20s %s %-25s %s %-15s %s %-10s %s %-15s %s %-5s",
                 "|", bookingId,
                 "|", user.getFullName(),
                 "|", passenger.getFullName(),
-                "|", DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(date),
+                "|", flight.getDeparture().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
                 "|", flight.getOrigin().toString(),
-                "|", DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(flight.getDeparture()),
+                "|", flight.getArrival().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
                 "|", flight.getDestination()
         ).toString();
     }

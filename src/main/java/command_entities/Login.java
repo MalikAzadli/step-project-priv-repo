@@ -36,6 +36,7 @@ public class Login implements Executable {
 
         Optional<User> result = switcher.login(credentials[0], credentials[1]);
         if (result.isPresent()) {
+            toolkit.setUserActivated(true);
             toolkit.setUser(result.get());
         }
     }

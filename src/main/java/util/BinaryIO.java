@@ -7,7 +7,6 @@ import java.util.Map;
 public class BinaryIO<T> {
     private final File file;
     private List<T> data;
-    private Map<String, T> dataMap;
 
     public BinaryIO(File file, List<T> data) {
         this.file = file;

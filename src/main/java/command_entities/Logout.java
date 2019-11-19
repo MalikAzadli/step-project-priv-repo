@@ -20,5 +20,6 @@ public class Logout implements Executable {
     @Override
     public void execute() {
         switcher.logout(toolkit.getUser().getUsername());
+        toolkit.setUserActivated(false);
     }
 }

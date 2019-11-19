@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Flight implements Serializable {
@@ -11,13 +12,14 @@ public class Flight implements Serializable {
 
     private Integer flightId;
     private String flightNo;
-    private int capacity;
+    private final Integer capacity;
     private LocalDateTime departure;
     private Airline airline;
     private Airport origin;
     private LocalDateTime arrival;
     private Airport destination;
     private List<Passenger> passengers = new ArrayList<>();
+    private Integer passNumber = 0;
 
     public Flight(String flightNo, int capacity) {
         this.flightId = counter++;
@@ -104,27 +106,24 @@ public class Flight implements Serializable {
     }
 
     public void addPassenger(Passenger passenger) {
-        if(!isFull()) this.passengers.add(passenger);
+        if(!isFull()) {
+            this.passengers.add(passenger);
+            passNumber = passengers.size();
+        }
+
     }
 
     public void removePassenger(Passenger passenger) {
         this.passengers.remove(passenger);
+        passNumber = passengers.size();
     }
 
     public String getFlightNo() {
         return flightNo;
     }
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
     public int availableSeats() {
-        return capacity - passengers.size();
+        return capacity - passNumber;
     }
 
     public boolean isFull(){
@@ -155,15 +154,15 @@ public class Flight implements Serializable {
         Formatter fmt = new Formatter(sb);
 
         return fmt.format(
-                "%s %-3s %s %-5s %s %-20s %s %-12s %s %-15s %s %-12s %s %-15s %s %-3s",
+                "%s %-3s %s %-5s %s %-20s %s %-12s %s %-15s %s %-12s %s %-15s %s %-3s %s",
                 "|", flightId,
                 "|", flightNo,
                 "|", airline,
                 "|", origin,
-                "|", departure.toString().replace("T", " "),
+                "|", departure.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
                 "|", destination,
-                "|", arrival.toString().replace("T", " "),
-                "|", (availableSeats()),
+                "|", arrival.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
+                "|", capacity-passNumber,
                 "|"
         ).toString();
     }

@@ -11,6 +11,21 @@ public class Toolkit {
     private final Switcher switcher;
     private final Console console;
     private User user;
+    private boolean isUserActivated;
+
+    public Toolkit(Validator validator, Switcher switcher, Console console) {
+        this.validator = validator;
+        this.switcher = switcher;
+        this.console = console;
+    }
+
+    public boolean isUserActivated() {
+        return isUserActivated;
+    }
+
+    public void setUserActivated(boolean userActivated) {
+        isUserActivated = userActivated;
+    }
 
     public Validator getValidator() {
         return validator;
@@ -22,12 +37,6 @@ public class Toolkit {
 
     public Console getConsole() {
         return console;
-    }
-
-    public Toolkit(Validator validator, Switcher switcher, Console console) {
-        this.validator = validator;
-        this.switcher = switcher;
-        this.console = console;
     }
 
     public User getUser(){
