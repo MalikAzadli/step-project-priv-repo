@@ -115,6 +115,14 @@ public class Flight implements Serializable {
         return flightNo;
     }
 
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
     public int availableSeats() {
         return capacity - passengers.size();
     }
@@ -155,7 +163,7 @@ public class Flight implements Serializable {
                 "|", departure.toString().replace("T", " "),
                 "|", destination,
                 "|", arrival.toString().replace("T", " "),
-                "|", availableSeats(),
+                "|", (availableSeats()),
                 "|"
         ).toString();
     }

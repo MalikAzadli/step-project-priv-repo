@@ -4,16 +4,21 @@ import model.User;
 import ui.Console;
 import ui.Switcher;
 import ui.Validator;
+import util.Toolkit;
 
-public class UserBookings extends CommandBlueprint{
+public class UserBookings implements Executable {
+    private final Console console;
+    private final Switcher switcher;
+    private final Toolkit toolkit;
 
-    public UserBookings(Console console, Validator validator, Switcher switcher, User user) {
-        super(console, validator, switcher, user);
+    public UserBookings(Toolkit toolkit) {
+        this.switcher = toolkit.getSwitcher();
+        this.console = toolkit.getConsole();
+        this.toolkit = toolkit;
     }
-
 
     @Override
     public void execute() {
-        console.printLn(switcher.userBookings(user.getFirstName(), user.getLastName()));
+        console.printLn(switcher.userBookings(toolkit.getUser().getFirstName(), toolkit.getUser().getLastName()));
     }
 }

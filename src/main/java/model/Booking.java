@@ -1,7 +1,6 @@
 package model;
 
 import java.io.Serializable;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -37,6 +36,12 @@ public class Booking implements Serializable {
         this.bookingId = id;
         this.flight = flight;
         this.passenger = passenger;
+    }
+
+    public Booking(int flightId, Flight flight, User user){
+        this.bookingId = flightId;
+        this.flight = flight;
+        this.user = user;
     }
 
     public int getBookingId() {

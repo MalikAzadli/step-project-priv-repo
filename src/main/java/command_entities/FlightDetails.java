@@ -4,16 +4,21 @@ import ui.Console;
 import ui.InputTypes;
 import ui.Switcher;
 import ui.Validator;
+import util.Toolkit;
 
-public class FlightDetails extends CommandBlueprint {
+public class FlightDetails implements Executable {
+    private final Console console;
+    private final Switcher switcher;
+    private final Toolkit toolkit;
 
-    public FlightDetails(Console console, Validator validator, Switcher switcher) {
-        super(console, validator, switcher);
+    public FlightDetails(Toolkit toolkit) {
+        this.switcher = toolkit.getSwitcher();
+        this.console = toolkit.getConsole();
+        this.toolkit = toolkit;
     }
-
     @Override
     public void execute() {
-        String flightId = getInput("Flight ID: ", InputTypes.FLIGHT_NO);
+        String flightId = toolkit.getInput("Flight ID: ", InputTypes.FLIGHT_NO);
         if (flightId.isEmpty()) return;
         console.printLn(switcher.flightDetails(flightId));
     }

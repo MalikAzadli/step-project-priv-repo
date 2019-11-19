@@ -2,36 +2,52 @@ package command_entities;
 
 import model.User;
 import ui.*;
-import util.Pair;
+import util.Toolkit;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
-public class Login extends CommandBlueprint {
+public class Login implements Executable {
+    private final Validator validator;
+    private final Console console;
+    private final Switcher switcher;
+    private final Toolkit toolkit;
 
-    public Login(Console console, Validator validator, Switcher switcher) {
-        super(console, validator, switcher);
+    public Login(Toolkit toolkit) {
+        this.validator = toolkit.getValidator();
+        this.switcher = toolkit.getSwitcher();
+        this.console = toolkit.getConsole();
+        this.toolkit = toolkit;
     }
 
     @Override
     public void execute() {
+        String[] credentials = new String[2];
+        boolean isExit = false;
+        while (!isExit) {
+            credentials = getCredentials();
 
-        List<Pair> requirements = new ArrayList<>(Arrays.asList(
-                new Pair("Username: ", InputTypes.REGISTERED_USERNAME),
-                new Pair("Password: ", InputTypes.REGISTERED_PASSWORD)));
+            if (credentials[0].equalsIgnoreCase(Commands.EXIT.toString())
+                    || credentials[1].equalsIgnoreCase(Commands.EXIT.toString())) return;
 
-        List<String> inputs = new ArrayList<>();
-        for(Pair p: requirements){
-            String input = getInput(p.getMessage(), p.getTypes());
-            if(input.isEmpty()) return;
-            inputs.add(input);
+            String result = validator.isValidUser(credentials[0], credentials[1]);
+            if (result.isEmpty()) isExit = true;
+            else console.printLn(result);
         }
 
-        Optional<User> result = switcher.login(inputs.get(0), inputs.get(1));
+        Optional<User> result = switcher.login(credentials[0], credentials[1]);
         if (result.isPresent()) {
-            user = result.get();
+            toolkit.setUser(result.get());
         }
+    }
+
+    private String[] getCredentials() {
+        String[] credentials = new String[2];
+        console.print("Username: ");
+        credentials[0] = console.readLn().trim();
+        if (credentials[0].equalsIgnoreCase(Commands.EXIT.toString())) return credentials;
+        console.print("Password: ");
+        credentials[1] = console.readLn().trim();
+        if (credentials[1].trim().equalsIgnoreCase(Commands.EXIT.toString())) return credentials;
+        return credentials;
     }
 }

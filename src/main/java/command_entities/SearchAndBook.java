@@ -1,20 +1,26 @@
 package command_entities;
 
-import model.User;
 import ui.Console;
 import ui.InputTypes;
 import ui.Switcher;
-import ui.Validator;
 import util.Pair;
+import util.Toolkit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SearchAndBook extends CommandBlueprint {
+public class SearchAndBook implements Executable {
 
-    public SearchAndBook(Console console, Validator validator, Switcher switcher, User user) {
-        super(console, validator, switcher, user);
+    private final Console console;
+    private final Switcher switcher;
+    private final Toolkit toolkit;
+
+    public SearchAndBook(Toolkit toolkit) {
+
+        this.switcher = toolkit.getSwitcher();
+        this.console = toolkit.getConsole();
+        this.toolkit = toolkit;
     }
 
     @Override
@@ -27,9 +33,9 @@ public class SearchAndBook extends CommandBlueprint {
                 new Pair("Number of people: ", InputTypes.INTEGER)));
 
         List<String> inputs = new ArrayList<>();
-        for(Pair p: requirements){
-            String input = getInput(p.getMessage(), p.getTypes());
-            if(input.isEmpty()) return;
+        for (Pair p : requirements) {
+            String input = toolkit.getInput(p.getMessage(), p.getTypes());
+            if (input.isEmpty()) return;
             inputs.add(input);
         }
 
@@ -41,7 +47,7 @@ public class SearchAndBook extends CommandBlueprint {
         }
 
         console.printLn(result);
-        String flightNo = getInput("Enter flight ID to book or 'exit': ", InputTypes.FLIGHT_NO);
+        String flightNo = toolkit.getInput("Enter flight ID to book or 'exit': ", InputTypes.FLIGHT_NO);
 
         if (flightNo.isEmpty()) return;
 
@@ -50,15 +56,15 @@ public class SearchAndBook extends CommandBlueprint {
         for (int i = 0; i < numberOfPassenger; i++) {
             String[] user = getPassenger(i);
             if (user[0].isEmpty() || user[1].isEmpty()) return;
-            console.printLn(switcher.book(flightNo, user[0], user[1], this.user));
+            console.printLn(switcher.book(flightNo, user[0], user[1], toolkit.getUser()));
         }
 
     }
 
     private String[] getPassenger(int num) {
         String[] user = new String[2];
-        user[0] = getInput("Name: ", InputTypes.NAME);
-        user[1] = getInput("Surname: ", InputTypes.SURNAME);
+        user[0] = toolkit.getInput("Name: ", InputTypes.NAME);
+        user[1] = toolkit.getInput("Surname: ", InputTypes.SURNAME);
 
         return user;
     }

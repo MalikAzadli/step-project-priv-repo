@@ -9,11 +9,8 @@ public enum InputTypes {
     NAME,
     SURNAME,
     PASSWORD,
-    REGISTERED_PASSWORD,
     USERNAME,
-    REGISTERED_USERNAME,
     EMAIL,
-    REGISTERED_EMAIL,
 
     CITY,
     INTEGER,

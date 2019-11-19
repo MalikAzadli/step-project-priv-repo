@@ -6,6 +6,7 @@ import dao.binary.UserDAO;
 import model.User;
 
 import java.io.File;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class UserServiceImpl {
@@ -42,12 +43,20 @@ public class UserServiceImpl {
                 .isEmpty();
     }
 
-    public User getUser(String username, String password) {
+    public Optional<User> getUser(String username, String password) {
         return userDAO.findAll().stream()
                 .filter(user -> user.getPassword().equals(password))
                 .filter(user -> user.getUsername().equalsIgnoreCase(username))
-                .collect(Collectors.toList())
-                .get(0);
+                .findFirst();
+    }
+
+    public String getPassword(String username) {
+        Optional<User> first = userDAO.findAll().stream()
+                .filter(user -> user.getUsername().equals(username))
+                .findFirst();
+
+        if(first.isPresent()) return first.get().getPassword();
+        return "";
     }
 
     public void load() {

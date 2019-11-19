@@ -3,18 +3,24 @@ package command_entities;
 import ui.Console;
 import ui.InputTypes;
 import ui.Switcher;
-import ui.Validator;
+import util.Toolkit;
 
-public class TimetableWithin extends CommandBlueprint {
+public class TimetableWithin implements Executable {
 
-    public TimetableWithin(Console console, Validator validator, Switcher switcher) {
-        super(console, validator, switcher);
+    private final Console console;
+    private final Switcher switcher;
+    private final Toolkit toolkit;
+
+    public TimetableWithin(Toolkit toolkit) {
+        this.switcher = toolkit.getSwitcher();
+        this.console = toolkit.getConsole();
+        this.toolkit = toolkit;
     }
 
     @Override
     public void execute() {
-        String day = getInput("Range with days: ", InputTypes.INTEGER);
-        if(day.isEmpty()) return;
+        String day = toolkit.getInput("Range with days: ", InputTypes.INTEGER);
+        if (day.isEmpty()) return;
         console.printLn(switcher.allFlightsWithin(day));
     }
 }

@@ -5,15 +5,23 @@ import ui.InputTypes;
 import ui.Switcher;
 import ui.Validator;
 import util.Pair;
+import util.Toolkit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Register extends CommandBlueprint {
+public class Register implements Executable {
+    private final Validator validator;
+    private final Console console;
+    private final Switcher switcher;
+    private final Toolkit toolkit;
 
-    public Register(Console console, Validator validator, Switcher switcher) {
-        super(console, validator, switcher);
+    public Register(Toolkit toolkit) {
+        this.validator = toolkit.getValidator();
+        this.switcher = toolkit.getSwitcher();
+        this.console = toolkit.getConsole();
+        this.toolkit = toolkit;
     }
 
     @Override
@@ -28,7 +36,7 @@ public class Register extends CommandBlueprint {
 
         List<String> inputs = new ArrayList<>();
         for (Pair p : requirements) {
-            String input = getInput(p.getMessage(), p.getTypes());
+            String input = toolkit.getInput(p.getMessage(), p.getTypes());
             if (input.isEmpty()) return;
             inputs.add(input);
         }

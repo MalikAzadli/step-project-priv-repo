@@ -2,12 +2,16 @@ package command_entities;
 
 import ui.Console;
 import ui.Switcher;
-import ui.Validator;
+import util.Toolkit;
 
-public class Timetable extends CommandBlueprint {
+public class Timetable implements Executable {
 
-    public Timetable(Console console, Validator validator, Switcher switcher) {
-        super(console, validator, switcher);
+    private final Console console;
+    private final Switcher switcher;
+
+    public Timetable(Toolkit toolkit){
+        this.switcher = toolkit.getSwitcher();
+        this.console = toolkit.getConsole();
     }
 
     @Override

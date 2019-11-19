@@ -7,6 +7,7 @@ import model.Passenger;
 import model.User;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,16 +42,23 @@ public class BookingServiceImpl implements BookingService {
     }
 
     public List<Booking> findAllBookingsOPassengerByName(String name) {
-        return bookingDAO.findAll().stream()
-                .filter(b -> (name.toUpperCase()).equals(b.getPassenger().getFullName().toUpperCase()))
-                .collect(Collectors.toList());
+        try {
+            return bookingDAO.findAll().stream()
+                    .filter(b -> (name).equalsIgnoreCase(b.getPassenger().getFullName()))
+                    .collect(Collectors.toList());
+        } catch (NullPointerException ex) {
+            return new ArrayList<>();
+        }
     }
 
     @Override
     public List<Booking> findAllBookingsOfUserByName(String name) {
-        return bookingDAO.findAll().stream()
-                .filter(b -> (name.toUpperCase()).equals(b.getUser().getFullName().toUpperCase()))
+        List<Booking> collect = bookingDAO.findAll().stream()
+                .filter(b -> (name).equalsIgnoreCase(b.getUser().getFullName()))
                 .collect(Collectors.toList());
+
+        if (collect.isEmpty()) return new ArrayList<>();
+        return collect;
     }
 
     @Override
@@ -66,13 +74,13 @@ public class BookingServiceImpl implements BookingService {
         if (passengers == null) throw new IllegalArgumentException("There need to be passengers.");
         int id = bookingDAO.findAll().size();
         for (Passenger p : passengers) {
-            bookingDAO.create(new Booking(flight, user, p, id+1));
+            bookingDAO.create(new Booking(flight, user, p, id + 1));
         }
     }
 
     public void creteBooking(Flight flight, Passenger passenger, User user) {
         int id = bookingDAO.findAll().size();
-        bookingDAO.create(new Booking(flight, passenger, user,id+1));
+        bookingDAO.create(new Booking(flight, passenger, user, id + 1));
     }
 
     @Override

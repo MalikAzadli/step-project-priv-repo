@@ -61,7 +61,6 @@ public class FlightDAO implements DAO<Flight> {
     @Override
     public void load() {
         io.load();
-
     }
 
     @Override

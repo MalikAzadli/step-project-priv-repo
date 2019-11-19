@@ -8,13 +8,10 @@ import model.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import java.util.Optional;
 
 import util.Logger;
-
-import java.util.stream.Collectors;
 
 public class Switcher {
 
@@ -34,6 +31,7 @@ public class Switcher {
         Integer range = Integer.parseInt(day);
         StringBuilder stringBuilder = new StringBuilder();
         flightController.findAllWithin(range).forEach(flight -> stringBuilder.append(flight + "\n"));
+
         logger.log(LocalDateTime.now(), String.format("Flights were displayed within %s days range.", day));
         return stringBuilder.toString();
     }
@@ -41,6 +39,7 @@ public class Switcher {
     public String allFlights() {
         StringBuilder stringBuilder = new StringBuilder();
         flightController.findAllFlights().forEach(flight -> stringBuilder.append(flight + "\n"));
+
         logger.log(LocalDateTime.now(), String.format("All available flights were displayed."));
         return stringBuilder.toString();
     }
@@ -54,7 +53,7 @@ public class Switcher {
                 Integer.parseInt(peopleCount))
                 .forEach(flight -> string.append(String.format("%s\n", flight.toString())));
 
-        logger.log(LocalDateTime.now(), String.format("Flights were searched with %s, %s, %s, %s",
+        logger.log(LocalDateTime.now(), String.format("Flights were searched with following criterias %s, %s, %s, %s",
                 origin,
                 destination,
                 date,
@@ -63,22 +62,6 @@ public class Switcher {
         return string.toString();
     }
 
-    public String book(String flightId, List<String[]> fullname, User user) {
-        int flightID = Integer.parseInt(flightId);
-        Flight flight = flightController.findFlightByFlightId(flightID).get();
-        Passenger[] passengers = new Passenger[fullname.size()];
-        for(int i = 0; i < fullname.size(); i++){
-            passengers[i] = new Passenger(fullname.get(i)[0], fullname.get(i)[1]);
-        }
-        bookingController.createBooking(flight, user, passengers);
-        flightController.refresh();
-        logger.log(LocalDateTime.now(), String.format("%d seats were booked for flight number %s",
-                fullname.size(),
-                flight.getFlightNo()));
-        return "All bookings were noted.";
-    }
-
-    //TODO think about refactoting this method. eliminate one of them!!!
     public String book(String flightId, String pasName, String pasSurname, User user) {
         int flightID = Integer.parseInt(flightId);
         Flight flight = flightController.findFlightByFlightId(flightID).get();
@@ -143,7 +126,7 @@ public class Switcher {
     public Optional<User> login(String username, String password) {
         logger.log(LocalDateTime.now(),
                 String.format("User, %s logged in.", username));
-        return Optional.of(userController.getUser(username, password));
+        return userController.getUser(username, password);
     }
 
     public void logout(String username) {

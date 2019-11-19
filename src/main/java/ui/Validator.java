@@ -57,16 +57,10 @@ public class Validator {
                 return isValidNaming(line);
             case EMAIL:
                 return isEmail(line);
-            case REGISTERED_EMAIL:
-                return isRegisteredEmail(line);
             case PASSWORD:
                 return isPassword(line);
-            case REGISTERED_PASSWORD:
-                return isRegisteredPassword(line);
             case USERNAME:
                 return isUsername(line);
-            case REGISTERED_USERNAME:
-                return isRegisteredUser(line);
             case INTEGER:
                 return isInteger(line);
             case EXIT:
@@ -75,28 +69,10 @@ public class Validator {
         return false;
     }
 
-    private boolean isRegisteredUser(String line) {
-        if (!userController.isUsername(line)) {
-            console.printLn("This is not registered username");
-            return false;
-        }
-        return true;
-    }
-
-    private boolean isRegisteredEmail(String line) {
-        if (!userController.isEmail(line)) {
-            console.printLn("This is not registered email.");
-            return false;
-        }
-        return true;
-    }
-
-    private boolean isRegisteredPassword(String line) {
-        if (!userController.isPassword(line)) {
-            console.printLn("Wrong Password");
-            return false;
-        }
-        return true;
+    public String isValidUser(String username, String password){
+        if(!userController.isUsername(username)) return "No such user was found.";
+        if(!userController.getPassword(username).equals(password)) return "Wrong Password";
+        return "";
     }
 
     private boolean isUsername(String line) {
@@ -177,10 +153,10 @@ public class Validator {
         for (int i = 0; i < line.length(); i++) {
             char ch = line.charAt(i);
             if (Character.isUpperCase(ch)) isUppercase = true;
-            if (Character.isLowerCase(ch)) isLowercase = true;
-            if (Character.isWhitespace(ch)) isWhiteSpace = true;
-            if (Character.isDigit(ch)) isInteger = true;
-            if (!Character.isLetter(ch)) isSymbol = true;
+            else if (Character.isLowerCase(ch)) isLowercase = true;
+            else if (Character.isWhitespace(ch)) isWhiteSpace = true;
+            else if (Character.isDigit(ch)) isInteger = true;
+            else if (!Character.isLetter(ch)) isSymbol = true;
         }
 
         if (isInteger && isUppercase && isLowercase && isSymbol && !isWhiteSpace) return true;

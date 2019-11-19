@@ -5,15 +5,21 @@ import ui.InputTypes;
 import ui.Switcher;
 import ui.Validator;
 import util.Pair;
+import util.Toolkit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PassengerBooking extends CommandBlueprint {
+public class PassengerBooking implements Executable {
+    private final Console console;
+    private final Switcher switcher;
+    private final Toolkit toolkit;
 
-    public PassengerBooking(Console console, Validator validator, Switcher switcher) {
-        super(console,validator,switcher);
+    public PassengerBooking(Toolkit toolkit) {
+        this.switcher = toolkit.getSwitcher();
+        this.console = toolkit.getConsole();
+        this.toolkit = toolkit;
     }
 
     @Override
@@ -24,9 +30,9 @@ public class PassengerBooking extends CommandBlueprint {
                 new Pair("Surname: ", InputTypes.SURNAME)));
 
         List<String> inputs = new ArrayList<>();
-        for(Pair p: requirements){
-            String input = getInput(p.getMessage(), p.getTypes());
-            if(input.isEmpty()) return;
+        for (Pair p : requirements) {
+            String input = toolkit.getInput(p.getMessage(), p.getTypes());
+            if (input.isEmpty()) return;
             inputs.add(input);
         }
 

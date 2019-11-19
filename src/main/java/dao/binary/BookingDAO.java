@@ -2,12 +2,11 @@ package dao.binary;
 
 import dao.DAO;
 import model.Booking;
-import model.Flight;
-import model.User;
 import util.BinaryIO;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class BookingDAO implements DAO<Booking> {
 
@@ -56,11 +55,17 @@ public class BookingDAO implements DAO<Booking> {
         try{
             Booking chosen = bookings.stream().filter(booking -> booking.getBookingId() == id).findFirst().get();
             chosen.getFlight().removePassenger(chosen.getPassenger());
-            return bookings.removeIf(booking -> id == booking.getBookingId());
+            boolean removed = bookings.remove(chosen);
+            refreshIds();
+            return removed;
         } catch (IllegalArgumentException e){
             e.printStackTrace();
             throw new IllegalArgumentException("No such user found.");
         }
+    }
+
+    public synchronized void refreshIds(){
+        IntStream.range(0, bookings.size()).forEach(i -> bookings.get(i).setBookingId(i+1));
     }
 
     public void load() {

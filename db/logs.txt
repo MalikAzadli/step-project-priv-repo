@@ -1,16 +1,4 @@
-11/19/19, 12:47 AM    New user was registered with username of malikk
+11/19/19, 1:04 PM    All available flights were displayed.
 
-11/19/19, 12:47 AM    User, malikk logged in.
-
-11/19/19, 12:47 AM    Details of flight with id #2 were searched.
-
-11/19/19, 12:47 AM    Flights were searched with istanbul, kyiv, 18/12/2019, 2
-
-11/19/19, 12:47 AM    Seats was booked for flight number TK316 for Malik Ibadov
-
-11/19/19, 12:48 AM    Seats was booked for flight number TK316 for Lea Seydoux
-
-11/19/19, 12:48 AM    User with name, "Malik" and surname, "Azadli" searched for his/her bookings.
-
-11/19/19, 12:48 AM    Program stopped
+11/19/19, 1:04 PM    Program stopped
 

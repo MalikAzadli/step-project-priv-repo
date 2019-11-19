@@ -4,6 +4,7 @@ import model.User;
 import service.UserServiceImpl;
 
 import java.io.File;
+import java.util.Optional;
 
 public class UserController {
 
@@ -35,8 +36,12 @@ public class UserController {
         return service.isPassword(line);
     }
 
-    public User getUser(String username, String password) {
+    public Optional<User> getUser(String username, String password) {
         return service.getUser(username, password);
+    }
+
+    public String getPassword(String username){
+        return service.getPassword(username);
     }
 
     public void load() {

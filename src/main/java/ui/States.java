@@ -10,9 +10,8 @@ public enum States {
         put("4", Commands.FLIGHT_DETAILS);
         put("5", Commands.USER_BOOKINGS);
         put("6", Commands.CANCEL_BOOKING);
-        put("7", Commands.HELP);
-        put("8", Commands.LOGOUT);
-        put("9", Commands.EXIT);
+        put("7", Commands.LOGOUT);
+        put("8", Commands.EXIT);
         put("EXIT", Commands.EXIT);
     }}),
 
@@ -23,8 +22,7 @@ public enum States {
         put("4", Commands.PASSENGER_BOOKINGS);
         put("5", Commands.LOGIN);
         put("6", Commands.REGISTER);
-        put("7", Commands.HELP);
-        put("8", Commands.EXIT);
+        put("7", Commands.EXIT);
         put("EXIT", Commands.EXIT);
     }});
 
