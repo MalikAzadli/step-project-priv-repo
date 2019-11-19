@@ -3,7 +3,6 @@ import command_entities.*;
 import controller.BookingController;
 import controller.FlightController;
 import controller.UserController;
-import model.User;
 import ui.*;
 import util.Toolkit;
 
@@ -11,10 +10,7 @@ public class BookingManager {
     private final Console console;
     private final Display display;
     private final Database database;
-    private final Switcher switcher;
     private final Validator validator;
-    private Commands command;
-    private Executable commandBasic;
     private States state = States.VISITOR;
     private Toolkit toolkit;
 
@@ -26,9 +22,9 @@ public class BookingManager {
         BookingController bookingController = new BookingController();
         UserController userController = new UserController();
         this.database = new Database(userController, flightController, bookingController);
-        this.switcher = new Switcher(flightController, bookingController, userController);
+        Switcher switcher = new Switcher(flightController, bookingController, userController);
         this.validator = new Validator(flightController, bookingController, userController, console);
-        this.toolkit = new Toolkit(this.validator, this.switcher, this.console);
+        this.toolkit = new Toolkit(this.validator, switcher, this.console);
     }
 
     public void run() {
@@ -37,7 +33,8 @@ public class BookingManager {
         while (isEnd) {
             console.print(display.display(state));
             String line = console.readLn();
-            command = validator.resolveCommand(line, state);
+            Commands command = validator.resolveCommand(line, state);
+            Executable commandBasic;
             switch (command) {
                 case LOGIN: {
                     commandBasic = new Login(toolkit);
