@@ -5,6 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class UserServiceImplTest {
+    //TODO Service Tests
 
     @Test
     public void create() {
