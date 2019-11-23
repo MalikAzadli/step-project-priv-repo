@@ -44,12 +44,12 @@ public class UserDAO implements DAO<User> {
     @Override
     public boolean create(User user) {
         if (user == null) throw new IllegalArgumentException("Null user.");
-        if (getAllUsernames().contains(user.getUsername())) return false;
+        if (getAllUsername().contains(user.getUsername())) return false;
         users.add(user);
         return true;
     }
 
-    public Set<String> getAllUsernames() {
+    public Set<String> getAllUsername() {
         return users.stream().map(user -> user.getUsername()).collect(Collectors.toSet());
     }
 
