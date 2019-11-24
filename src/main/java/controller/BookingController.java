@@ -26,7 +26,7 @@ public class BookingController {
     }
 
     public List<Booking> findAllBookingsOfPassenger(int passengerId) {
-        return service.findAllBookingsOfPassenger(passengerId);
+        return service.findAllBookingsOfPassengerById(passengerId);
     }
 
     public List<Booking> findAllBookingsOfUserById(int userId) {
@@ -41,12 +41,8 @@ public class BookingController {
         return service.findAllBookingsOfUserByName(name);
     }
 
-    public void createBooking(Flight flight, User user, Passenger[] passengers) {
-        service.createBooking(flight, user, passengers);
-    }
-
     public void createBooking(Flight flight, Passenger passenger, User user){
-        service.creteBooking(flight, passenger, user);
+        service.createBooking(flight, passenger, user);
     }
 
     public Optional<Booking> findBookingById(int bookingId) {

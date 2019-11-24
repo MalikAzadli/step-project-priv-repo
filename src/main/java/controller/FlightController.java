@@ -39,10 +39,6 @@ public class FlightController {
 
     public Optional<Flight> findFlightByFlightId(int flightId) { return service.findFlightByFlightId(flightId); }
 
-    public Optional<Flight> findFlightByFlightNo(String flightNo) {
-        return service.findFlightByFlightNo(flightNo);
-    }
-
     public void create(Flight flight) {
         service.create(flight);
     }

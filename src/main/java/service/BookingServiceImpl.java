@@ -17,18 +17,19 @@ public class BookingServiceImpl implements BookingService {
 
     public BookingServiceImpl() {
         bookingDAO = new BookingDAO();
-        bookingDAO.load();
     }
 
     public BookingServiceImpl(File file) {
         bookingDAO = new BookingDAO(file);
     }
 
+    @Override
     public List<Booking> findAllBookings() {
         return bookingDAO.findAll();
     }
 
-    public List<Booking> findAllBookingsOfPassenger(int passengerId) {
+    @Override
+    public List<Booking> findAllBookingsOfPassengerById(int passengerId) {
         return bookingDAO.findAll().stream()
                 .filter(b -> b.getPassenger().getId() == passengerId)
                 .collect(Collectors.toList());
@@ -37,10 +38,11 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<Booking> findAllBookingsOfUserById(int userId) {
         return bookingDAO.findAll().stream()
-                .filter(b -> b.getPassenger().getId() == userId)
+                .filter(b -> b.getUser().getId() == userId)
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<Booking> findAllBookingsOPassengerByName(String name) {
         try {
             return bookingDAO.findAll().stream()
@@ -66,19 +68,13 @@ public class BookingServiceImpl implements BookingService {
         return bookingDAO.findById(bookingId);
     }
 
+    @Override
     public void cancelBooking(int bookingId) {
         bookingDAO.remove(bookingId);
     }
 
-    public void createBooking(Flight flight, User user, Passenger[] passengers) {
-        if (passengers == null) throw new IllegalArgumentException("There need to be passengers.");
-        int id = bookingDAO.findAll().size();
-        for (Passenger p : passengers) {
-            bookingDAO.create(new Booking(flight, user, p, id + 1));
-        }
-    }
-
-    public void creteBooking(Flight flight, Passenger passenger, User user) {
+    @Override
+    public void createBooking(Flight flight, Passenger passenger, User user) {
         int id = bookingDAO.findAll().size();
         bookingDAO.create(new Booking(flight, passenger, user, id + 1));
     }

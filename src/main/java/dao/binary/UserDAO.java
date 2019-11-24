@@ -37,8 +37,7 @@ public class UserDAO implements DAO<User> {
 
     @Override
     public Optional<User> findById(int id) {
-        User user1 = users.stream().filter(user -> user.getId() == id).collect(Collectors.toList()).get(0);
-        return Optional.ofNullable(user1);
+        return users.stream().filter(user -> user.getId() == id).findFirst();
     }
 
     @Override
@@ -55,13 +54,12 @@ public class UserDAO implements DAO<User> {
 
     @Override
     public boolean remove(int id) {
-        try {
-            User found = users.stream().filter(user -> user.getId() == id).collect(Collectors.toList()).get(0);
-            return users.remove(found);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException("No such user found.");
+        Optional<User> found = users.stream().filter(user -> user.getId() == id).findFirst();
+        if(found.isPresent()){
+            return users.remove(found.get());
         }
+
+        return false;
     }
 
     @Override

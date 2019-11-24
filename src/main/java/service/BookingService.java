@@ -10,12 +10,13 @@ import java.util.Optional;
 
 public interface BookingService {
     List<Booking> findAllBookings();
-    List<Booking> findAllBookingsOfPassenger(int passengerId);
+    List<Booking> findAllBookingsOfPassengerById(int passengerId);
+    List<Booking> findAllBookingsOPassengerByName(String name);
     List<Booking> findAllBookingsOfUserById(int userId);
     List<Booking> findAllBookingsOfUserByName(String name);
     Optional<Booking> findBookingById(int bookingId);
     void cancelBooking(int bookingId);
-    void createBooking(Flight flight, User user, Passenger[] passengers);
+    void createBooking(Flight flight, Passenger passenger, User user);
     void save();
     void load();
 }

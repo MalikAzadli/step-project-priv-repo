@@ -37,25 +37,23 @@ public class FlightDAO implements DAO<Flight> {
 
     @Override
     public Optional<Flight> findById(int id) {
-        return Optional.ofNullable(flights.get(id));
+        return flights.stream().filter(flight -> flight.getFlightId() == id).findFirst();
     }
 
     @Override
     public boolean create(Flight flight) {
-        if (flight == null) throw new IllegalArgumentException("Null flight.");
-        if (flights.contains(flight)) return false;
+        if (flight == null || flights.contains(flight)) return false;
         flights.add(flight);
         return true;
     }
 
     @Override
     public boolean remove(int id) {
-        try {
-            return flights.removeIf(flight -> id == flight.getFlightId());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException("No such user found.");
+        Optional<Flight> chosen = flights.stream().filter(flight -> flight.getFlightId() == id).findFirst();
+        if (chosen.isPresent()) {
+            return flights.remove(chosen.get());
         }
+        return false;
     }
 
     @Override

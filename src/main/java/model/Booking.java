@@ -10,20 +10,12 @@ import java.util.Objects;
 public class Booking implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    static int counter = 1;
 
     private Integer bookingId;
     private final LocalDateTime date = LocalDateTime.now();
     private Flight flight;
     private User user;
     private Passenger passenger;
-
-    public Booking(Flight flight, User user, Passenger passenger, int id) {
-        this.bookingId = id;
-        this.flight = flight;
-        this.user = user;
-        this.passenger = passenger;
-    }
 
     public Booking(Flight flight, Passenger passenger, User user, int id) {
         this.bookingId = id;

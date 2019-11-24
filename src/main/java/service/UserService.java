@@ -8,6 +8,12 @@ public interface UserService {
 
     boolean create(User user);
 
+    boolean isUsername(String line);
+
+    boolean isEmail(String line);
+
+    boolean isPassword(String line);
+
     Optional<User> getUser(String username, String password);
 
     String getPassword(String username);

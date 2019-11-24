@@ -8,6 +8,7 @@ import model.Passenger;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -20,7 +21,6 @@ public class FlightServiceImpl implements FlightService {
 
     public FlightServiceImpl() {
         flightDAO = new FlightDAO();
-        flightDAO.load();
     }
 
     public FlightServiceImpl(File file) {
@@ -34,7 +34,11 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public List<Passenger> findPassengersOfFlight(int flightId) {
-        return findFlightByFlightId(flightId).map(f -> f.getPassengers()).get();
+        Optional<Flight> found = findFlightByFlightId(flightId);
+        if(found.isPresent()){
+            return found.get().getPassengers();
+        }
+        return new ArrayList<>();
     }
 
     public List<Flight> findAllWithin(int day) {
@@ -65,10 +69,7 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public void create(Flight flight) {
         flightDAO.create(flight);
-    }
-
-    public Optional<Flight> findFlightByFlightNo(String flightNo) {
-        return currentTable.stream().filter(f -> flightNo.equals(f.getFlightNo())).findFirst();
+        refresh();
     }
 
     @Override

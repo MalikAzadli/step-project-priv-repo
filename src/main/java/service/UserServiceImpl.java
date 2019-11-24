@@ -12,7 +12,6 @@ public class UserServiceImpl implements UserService {
 
     public UserServiceImpl() {
         userDAO = new UserDAO();
-        userDAO.load();
     }
 
     public UserServiceImpl(File file) {
@@ -24,10 +23,12 @@ public class UserServiceImpl implements UserService {
         return userDAO.create(user);
     }
 
+    @Override
     public boolean isUsername(String line) {
         return userDAO.getAllUsername().contains(line);
     }
 
+    @Override
     public boolean isEmail(String line) {
         return !userDAO.findAll().stream()
                 .filter(user -> user.getEmail().equalsIgnoreCase(line))
@@ -35,6 +36,7 @@ public class UserServiceImpl implements UserService {
                 .isEmpty();
     }
 
+    @Override
     public boolean isPassword(String line) {
         return !userDAO.findAll().stream()
                 .filter(user -> user.getPassword().equals(line))
