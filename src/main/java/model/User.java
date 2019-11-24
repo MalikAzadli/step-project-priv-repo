@@ -75,4 +75,8 @@ public class User implements Serializable {
     public String getFullName() {
         return firstName + " " + lastName;
     }
+
+    public Passenger getAsPassenger(){
+        return new Passenger(firstName, lastName);
+    }
 }

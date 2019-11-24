@@ -25,14 +25,6 @@ public class BookingController {
         return service.findAllBookings();
     }
 
-    public List<Booking> findAllBookingsOfPassenger(int passengerId) {
-        return service.findAllBookingsOfPassengerById(passengerId);
-    }
-
-    public List<Booking> findAllBookingsOfUserById(int userId) {
-        return service.findAllBookingsOfUserById(userId);
-    }
-
     public List<Booking> findAllBookingsOfPassengerByName(String name) {
         return service.findAllBookingsOPassengerByName(name);
     }
@@ -41,12 +33,12 @@ public class BookingController {
         return service.findAllBookingsOfUserByName(name);
     }
 
-    public void createBooking(Flight flight, Passenger passenger, User user){
-        service.createBooking(flight, passenger, user);
-    }
-
     public Optional<Booking> findBookingById(int bookingId) {
         return service.findBookingById(bookingId);
+    }
+
+    public void createBooking(Flight flight, Passenger passenger, User user){
+        service.createBooking(flight, passenger, user);
     }
 
     public void cancelBooking(int bookingId) {

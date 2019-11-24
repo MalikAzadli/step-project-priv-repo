@@ -15,7 +15,6 @@ public class UserController {
     }
 
     public UserController(File file) {
-
         service = new UserServiceImpl(file);
     }
 
@@ -40,7 +39,7 @@ public class UserController {
         return service.getUser(username, password);
     }
 
-    public String getPassword(String username){
+    public String getPassword(String username) {
         return service.getPassword(username);
     }
 
@@ -48,7 +47,7 @@ public class UserController {
         service.load();
     }
 
-    public void save(){
+    public void save() {
         service.save();
     }
 }

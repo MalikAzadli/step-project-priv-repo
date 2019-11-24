@@ -3,17 +3,14 @@ package model;
 import java.io.Serializable;
 
 public class Passenger implements Serializable {
+    private int counter=1;
     private int id;
     private String firstName;
     private String lastName;
     private int age;
 
-    public Passenger(int id, String firstName) {
-        this.id = id;
-        this.firstName = firstName;
-    }
-
     public Passenger(String firstName, String lastName){
+        this.id = counter++;
         this.firstName = firstName;
         this.lastName = lastName;
     }
